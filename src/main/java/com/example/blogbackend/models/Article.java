@@ -31,6 +31,10 @@ public class Article implements Serializable {
     @Column(nullable = false)
     @UpdateTimestamp
     private Date modifiedAt;
+    @ManyToOne(
+            optional = false,fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id",nullable = false)
+    private AppUser user;
 
 
 }

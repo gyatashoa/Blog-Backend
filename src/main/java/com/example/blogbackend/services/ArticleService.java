@@ -1,7 +1,10 @@
 package com.example.blogbackend.services;
 
+import com.example.blogbackend.filters.JwtFilter;
+import com.example.blogbackend.models.AppUser;
 import com.example.blogbackend.models.Article;
 import com.example.blogbackend.repositories.ArticleRepository;
+import com.example.blogbackend.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,9 @@ public class ArticleService {
     @Autowired
     private ArticleRepository articleRepository;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     public List<Article> getAll(){
         return this.articleRepository.findAll();
     }
@@ -26,7 +32,11 @@ public class ArticleService {
         });
     }
 
-    public Article addArticle(Article article){
+    public Article addArticle(Article article,String token){
+        Integer user_id = (Integer) this.jwtUtil.extractUserId(token);
+        var user = new AppUser();
+        user.setId(user_id.longValue());
+        article.setUser(user);
         return this.articleRepository.save(article);
     }
 

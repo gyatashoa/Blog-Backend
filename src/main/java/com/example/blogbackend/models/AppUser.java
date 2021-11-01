@@ -13,6 +13,7 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -36,6 +37,11 @@ public class AppUser implements UserDetails {
     @CreationTimestamp
     private Date createdAt;
     private boolean locked;
+
+//    @OneToMany(mappedBy="user", fetch = FetchType.LAZY,
+//            cascade = CascadeType.ALL)
+//    private Set<Article> articles;
+
 
     @PrePersist
     protected void prePersist(){

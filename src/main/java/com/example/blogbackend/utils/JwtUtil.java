@@ -1,6 +1,7 @@
 package com.example.blogbackend.utils;
 
 
+import com.example.blogbackend.models.AppUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Service
@@ -22,6 +24,7 @@ public class JwtUtil {
         return extractClaim(token, Claims::getSubject);
     }
 
+    public Object extractUserId(String token){ return extractClaim(token,(claims) ->claims.get("user_id"));}
 
     public <T> T extractClaim(String token, Function<Claims,T> claimResolver){
         final Claims claims = extractAllClaims(token);
@@ -32,10 +35,11 @@ public class JwtUtil {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(AppUser user){
         //claims can contain the payload we want
         Map<String,Object> claims = new HashMap<>();
-        return createToken(claims,userDetails.getUsername());
+        claims.put("user_id",user.getId());
+        return createToken(claims,user.getUsername());
     }
 
     private String createToken(Map<String,Object> claims,String subject){

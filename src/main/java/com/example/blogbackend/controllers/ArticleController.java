@@ -23,8 +23,8 @@ public class ArticleController {
     }
 
     @PostMapping
-    public Article addArticle(@RequestBody Article article){
-        return this.articleService.addArticle(article);
+    public Article addArticle(@RequestBody Article article,@RequestHeader("Authorization") String jwt){
+        return this.articleService.addArticle(article,jwt.substring(7));
     }
 
     @GetMapping("/{id}")
