@@ -28,8 +28,13 @@ public class ArticleController {
     }
 
     @GetMapping("/{id}")
-    public Article getById(@PathVariable UUID id){
-        return this.articleService.getArticleById(id);
+    public ResponseEntity<?> getById(@PathVariable UUID id){
+        try{
+            return ResponseEntity.ok().body(this.articleService.getArticleById(id));
+        }catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     @DeleteMapping("/{id}")
